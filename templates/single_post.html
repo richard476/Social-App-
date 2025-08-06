@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.user_name }}'s Post</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="max-w-2xl mx-auto py-10">
+        <a href="/" class="text-blue-600 hover:underline text-sm mb-4 inline-block">← Back to Feed</a>
+
+        <div class="bg-white p-6 rounded shadow">
+            <div class="flex items-center justify-between mb-2">
+                <span class="font-semibold text-lg">{{ post.user_name }}</span>
+                <span class="text-sm text-gray-500">{{ post.timestamp }}</span>
+            </div>
+            <p class="mb-2 text-base">{{ post.content }}</p>
+            {% if post.image_url %}
+                <img src="{{ post.image_url }}" alt="Post Image" class="w-full rounded mb-2">
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex items-center justify-between text-sm text-gray-600 mt-4">
+                <form action="/like/{{ post.id }}" method="post">
+                    <button class="hover:text-red-600">❤️ {{ post.likes }}</button>
+                </form>
+
+                <form action="/save/{{ post.id }}" method="post">
+                    <button class="hover:text-green-600">
+                        {% if post.saved %}✅ Saved{% else %}📌 Save{% endif %}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Comment Section -->
+            <div class="mt-6">
+                <h3 class="font-semibold text-sm mb-2">Comments:</h3>
+                <ul class="text-sm space-y-1 mb-2">
+                    {% for comment in post.comments %}
+                        <li>💬 {{ comment }}</li>
+                    {% endfor %}
+                </ul>
+                <form action="/comment/{{ post.id }}" method="post" class="flex gap-2">
+                    <input name="comment" placeholder="Add comment..." required class="flex-1 px-2 py-1 border rounded" />
+                    <button type="submit" class="text-sm bg-gray-800 text-white px-2 py-1 rounded">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
